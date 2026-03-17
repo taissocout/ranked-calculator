@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranked Calculator — DIO</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .container { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 32px; width: 100%; max-width: 480px; }
+    h1 { color: #f59e0b; font-size: 24px; margin-bottom: 8px; }
+    p { color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 15px; }
+    input:focus { outline: none; border-color: #f59e0b; }
+    button { width: 100%; padding: 12px; background: #f59e0b; color: #0f172a; font-weight: bold; font-size: 15px; border: none; border-radius: 8px; cursor: pointer; margin-top: 8px; }
+    button:hover { background: #fbbf24; }
+    .result { margin-top: 24px; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; display: none; }
+    .rank { font-size: 28px; font-weight: bold; color: #f59e0b; margin-bottom: 8px; }
+    .stats { font-size: 14px; color: #94a3b8; }
+    .saldo-pos { color: #35e0a1; } .saldo-neg { color: #ff4d5a; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚔️ Ranked Calculator</h1>
+    <p>DIO — Lógica de Programação Challenge</p>
+    <div class="form-group">
+      <label>Vitórias</label>
+      <input type="number" id="wins" min="0" value="0">
+    </div>
+    <div class="form-group">
+      <label>Derrotas</label>
+      <input type="number" id="losses" min="0" value="0">
+    </div>
+    <button onclick="calculate()">Calcular Rank</button>
+    <div class="result" id="result">
+      <div class="rank" id="rankDisplay"></div>
+      <div class="stats" id="statsDisplay"></div>
+    </div>
+  </div>
+  <script>
+    const ranks = [
+      { min: 0,   max: 9,   name: "Ferro" },
+      { min: 10,  max: 19,  name: "Bronze" },
+      { min: 20,  max: 49,  name: "Prata" },
+      { min: 50,  max: 79,  name: "Ouro" },
+      { min: 80,  max: 89,  name: "Diamante" },
+      { min: 90,  max: 99,  name: "Lendário" },
+      { min: 100, max: Infinity, name: "Imortal" },
+    ]
+    function getRank(wins) {
+      return ranks.find(r => wins >= r.min && wins <= r.max)?.name || "Ferro"
+    }
+    function calculate() {
+      const wins = parseInt(document.getElementById("wins").value) || 0
+      const losses = parseInt(document.getElementById("losses").value) || 0
+      const saldo = wins - losses
+      const rank = getRank(wins)
+      const result = document.getElementById("result")
+      result.style.display = "block"
+      document.getElementById("rankDisplay").textContent = `🏆 ${rank}`
+      const saldoClass = saldo >= 0 ? "saldo-pos" : "saldo-neg"
+      document.getElementById("statsDisplay").innerHTML =
+        `Vitórias: ${wins} | Derrotas: ${losses} | Saldo: <span class="${saldoClass}">${saldo > 0 ? "+" : ""}${saldo}</span>`
+    }
+  </script>
+</body>
+</html>
